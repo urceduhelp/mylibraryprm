@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>මගේ පුස්තකාලය — සෙවීම</title>
+<title>Admin — මගේ පුස්තකාලය</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
@@ -91,16 +91,16 @@ dialog::backdrop{background:rgba(0,0,0,.5)}
 .hid{display:inline-block;background:var(--rd);color:#fff;font-size:12px;border-radius:4px;padding:1px 8px;margin-bottom:4px}
 </style>
 </head>
-<body data-page="search">
+<body data-page="admin">
 <div id="toast" class="hide"></div>
 <div id="printarea"></div>
 <div class="wrap">
 
 <div class="bar"><h1>📚 මගේ පුස්තකාලය</h1></div>
-<div class="tabs"><a href="index.html" class="on">🔍 සෙවීම</a><a href="premium.html">⭐ Premium Member</a></div>
+<div class="tabs"><a href="index.html">🔍 සෙවීම</a><a href="premium.html">⭐ Premium Member</a><a href="admin.html" class="on">⚙ Admin</a></div>
 
 <!-- ============ SEARCH TAB ============ -->
-<div id="tabS">
+<div id="tabS" class="hide">
   <p class="stat" id="sstat">...</p>
   <div class="row" style="margin-bottom:12px"><label style="font-size:14px;color:var(--tx)">📑 මූලාශ්‍ර නාමාවලිය:</label>
     <select id="cs" onchange="openBib(this.value)" style="width:260px"><option value="">— සම්මත ක්‍රමයක් තෝරන්න —</option><option value="harvard">Harvard</option><option value="chicago">Chicago (Notes-Bibliography)</option><option value="apa">APA 7</option><option value="mla">MLA 9</option></select></div>
@@ -126,7 +126,7 @@ dialog::backdrop{background:rgba(0,0,0,.5)}
 </div>
 
 <!-- ============ ADMIN TAB ============ -->
-<div id="tabA" class="hide">
+<div id="tabA">
 
   <div id="alogin" class="card hide" style="max-width:380px;margin:30px auto">
     <h1>Admin — Login</h1><br>
@@ -1125,7 +1125,8 @@ async function toggleHide(id){
   if(error){ alert(error.message); return; }
   toast(h ? "පොත සැඟවුවා (Hide) ✔" : "පොත පෙන්වන ලදී (Show) ✔"); refresh();
 }
-load(); loadStats(); $("tabA").remove();
+load = async function(){};
+checkAdmin();
 </script>
 </body>
 </html>
