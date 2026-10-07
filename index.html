@@ -71,6 +71,8 @@ dialog input{width:100%;padding:9px;border:1px solid var(--bd);border-radius:6px
 .ck{display:flex;gap:8px;align-items:center;font-size:14px}
 .ck input{width:auto}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#222;color:#fff;padding:8px 16px;border-radius:20px;font-size:14px;z-index:99}
+.lnk{color:var(--ac);text-decoration:underline;word-break:break-all}
+.lnk:hover{text-decoration:none}
 </style>
 </head>
 <body>
@@ -274,8 +276,14 @@ $("q").addEventListener("input", () => { clearTimeout(timer); timer = setTimeout
 $("prev").onclick = () => { if(page > 0){ page--; load(true); } };
 $("next").onclick = () => { page++; load(true); };
 
+function linkOf(u){
+  u = String(u ?? "").trim();
+  const h = /^https?:\/\//i.test(u) ? u : /^www\./i.test(u) ? "https://" + u : "";
+  return h ? `<a class="lnk" href="${esc(h)}" target="_blank" rel="noopener noreferrer">${esc(u.replace(/^https?:\/\//i, "").replace(/\/$/, ""))}</a>` : "";
+}
 function card(b){
-  const pubLine = [b.publisher, b.pub_place, b.print_year].filter(Boolean).map(hl).join(" · ");
+  const pubLine = [b.publisher, b.pub_place, b.print_year].filter(Boolean).map(x => linkOf(x) || hl(x)).join(" · ");
+  const urlLine = b.url ? `<p class="pub">${linkOf(b.url) ? "🔗 " + linkOf(b.url) : hl(b.url)}</p>` : "";
   const subs = String(b.subject || "").split("/").map(x => x.trim()).filter(Boolean);
   const loc = [b.rack_number && "රාක්කය " + b.rack_number, b.shelf_number && "තට්ටුව " + b.shelf_number].filter(Boolean).join(", ");
   const meta = [
@@ -288,6 +296,7 @@ function card(b){
     ${b.is_hidden ? `<div class="hb">🙈 Hide Book — පොදු පිටුවේ නොපෙන්වයි</div>` : ""}<h2>${hl(b.title) || "(නම නැත)"}${b.volume ? ` <small>— ${esc(b.volume)}</small>` : ""}</h2>
     ${b.author ? `<p class="au">${hl(b.author)}</p>` : ""}
     ${pubLine ? `<p class="pub">${pubLine}</p>` : ""}
+    ${urlLine}
     ${meta ? `<div class="meta">${meta}</div>` : ""}
     ${(b.source_type || subs.length) ? `<div class="tags">${b.source_type ? `<span class="tag">${esc(b.source_type)}</span>` : ""}${subs.map(s => `<span class="tag">${hl(s)}</span>`).join("")}</div>` : ""}
     <div class="foot"><span>${b.price != null ? `මිල: ${money(b.price)}` : ""}${hasAdj(b) ? `<br>කාලීන: <b>${money(adjVal(b))}</b>` : ""}</span><button class="b g s" onclick="copyBook(${b.id})">📋 Copy</button></div>
