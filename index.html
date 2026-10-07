@@ -73,12 +73,18 @@ dialog input{width:100%;padding:9px;border:1px solid var(--bd);border-radius:6px
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#222;color:#fff;padding:8px 16px;border-radius:20px;font-size:14px;z-index:99}
 .lnk{color:var(--ac);text-decoration:underline;word-break:break-all}
 .lnk:hover{text-decoration:none}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--bd);margin:0 0 14px}
+.tabs a{padding:9px 16px;color:var(--mu);text-decoration:none;border-bottom:3px solid transparent;font-size:14.5px}
+.tabs a:hover{color:var(--tx)}
+.tabs a.on{color:var(--ac);border-bottom-color:var(--gd,var(--ac));font-weight:600}
+.tabs a.off{opacity:.45;cursor:not-allowed}
 </style>
 </head>
 <body>
 <div id="toast" class="hide"></div>
 <div class="wrap">
 <header><div><h1>⭐ Premium Member</h1><p id="stat"></p></div><button class="out hide" id="out" onclick="signOut()">Logout</button></header>
+<nav class="tabs" id="tabs"><a class="on" href="#" onclick="return false">⭐ Premium සෙවීම</a></nav>
 <div class="nav"><a href="index.html">← පොදු සෙවුම් පිටුව</a></div>
 
 <div id="login" class="login hide">
@@ -366,6 +372,22 @@ async function signIn(){
 }
 async function signOut(){ await sb.auth.signOut(); $("list").innerHTML = ""; gate(); }
 gate();
+</script>
+<script>
+/* අමතර tabs — ලිපිනයන් මෙහි වෙනස් කරන්න */
+const TAB_LINKS = [
+  {label:"📰 Web article collection", url:"https://urceduhelp.github.io/web_article_collection/"},
+  {label:"🎵 Song lyrics collection", url:""}   /* ← Song lyrics collection හි ලිපිනය මෙහි දමන්න */
+];
+(function(){
+  const t = document.getElementById("tabs");
+  TAB_LINKS.forEach(l => {
+    const a = document.createElement("a"); a.textContent = l.label;
+    if(/^https?:\/\//i.test(l.url)){ a.href = l.url; a.target = "_blank"; a.rel = "noopener noreferrer"; }
+    else { a.className = "off"; a.title = "ලිපිනය තවම ඇතුළත් කර නැත"; a.setAttribute("aria-disabled", "true"); }
+    t.appendChild(a);
+  });
+})();
 </script>
 </body>
 </html>
